@@ -1,0 +1,17 @@
+- name: Actualizar repositorios del sistema
+  shell: apt-get -y update && apt-get -y upgrade
+
+- name: Instalar Python 2
+  shell: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- name: Instalar python-pip
+  apt: name=python-pip state=present
+
+- name: Copiar script para actualización de Kernel
+  copy: src=kernel_upgrade.sh dest=/tmp
+
+- name: Actualizar Kernel de Linux
+  shell: chmod +x /tmp/kernel_upgrade.sh && /tmp/kernel_upgrade.sh && rm /tmp/kernel_upgrade.sh
+
+- name: Limpiar la carpeta /tmp
+  shell: rm -rf /tmp/*

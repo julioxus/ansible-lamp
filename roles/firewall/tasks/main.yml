@@ -1,0 +1,4 @@
+- name: Regla para permitir Apache (puertos 80 y 443)
+  shell: ufw allow in "Apache Full"
+
+

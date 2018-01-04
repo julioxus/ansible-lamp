@@ -1,0 +1,11 @@
+- name: Incluir la configuración de proxy en .bashrc 
+  shell: echo "export http_proxy={{ proxy }}:{{ proxy_port }}\nexport https_proxy={{ proxy }}:{{ proxy_port }}\nexport ftp_proxy={{ proxy }}:{{ proxy_port }}" >> ~/.bashrc
+
+- name: Actualizar las variables creadas en .bashrc
+  shell: . ~/.bashrc
+
+- name: Incluir la configuración de proxy en apt.conf
+  shell: echo "Acquire::http::proxy \"{{ proxy }}:{{ proxy_port }}\";\nAcquire::https::proxy \"{{ proxy }}:{{ proxy_port }}\";\nAcquire::ftp::proxy \"{{ proxy }}:{{ proxy_port }}\";" > /etc/apt/apt.conf
+
+- name: Reiniciar el servicio de networking
+  service: name=networking state=restarted

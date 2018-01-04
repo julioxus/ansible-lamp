@@ -1,0 +1,71 @@
+- name: Instalar Apache
+  apt: name=apache2 state=present
+
+- name: Instalar PHP
+  apt: name=php state=present
+
+- name: Instalar módulo PHP para Apache
+  apt: name=libapache2-mod-php state=present
+
+- name: Instalar módulo mcrypt de PHP
+  apt: name=php-mcrypt state=present
+
+- name: Instalar script Hello World de PHP
+  copy: src=index.php dest=/var/www/html/index.php mode=0664
+
+- name: Habilitar el módulo mod_rewrite
+  apache2_module: name=rewrite state=present
+  notify:
+   - restart apache2
+
+- name: Configurar puerto {{ http_port }}
+  lineinfile: dest=/etc/apache2/ports.conf regexp="^Listen " line="Listen {{ http_port }}" state=present
+
+- name: Crear host virtual
+  lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="^<VirtualHost \*:" line="<VirtualHost *:{{ http_port }}>"
+
+- name: Crear archivo del virtualhost
+  template: src=virtualhost.conf dest=/etc/apache2/sites-available/{{ domain }}.conf
+
+- name: a2ensite {{ domain }}
+  command: a2ensite {{ domain }}
+  args:
+    creates: /etc/apache2/sites-enabled/{{ domain }}.conf
+  notify:
+  - restart apache2
+
+- name: Generar certificado SSL autofirmado
+  shell: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt -subj "/C=US/ST=Chicago/O=Umbrella Corp/OU=IT Department/CN={{ domain }}"
+
+- name: Crear grupo DH SSL
+  shell: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+
+- name: Copiar los parámetros seguros de SSL
+  copy: src=ssl-params.conf dest=/etc/apache2/conf-available/ssl-params.conf
+
+- name: Crear archivo de configuración SSL
+  template: src=default-ssl.conf dest=/etc/apache2/sites-available/default-ssl.conf
+
+- name: Habilitar el módulo ssl
+  apache2_module: name=ssl state=present
+  notify:
+   - restart apache2
+
+- name: Habilitar el módulo headers
+  apache2_module: name=headers state=present
+  notify:
+   - restart apache2
+
+- name: a2ensite default-ssl
+  command: a2ensite default-ssl
+  notify:
+  - restart apache2
+
+- name: a2enconf ssl-params
+  command: a2enconf ssl-params
+  notify:
+  - restart apache2
+
+- name: Redirección automática http --> https
+  lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="^<\/VirtualHost>" line="RewriteEngine On\nRewriteRule ^(.*) https://%{HTTP_HOST}$1\n</VirtualHost>"
+

@@ -1,0 +1,28 @@
+# Configuración inicial para Ubuntu 16.04
+
+- hosts: apache
+  sudo: yes
+  vars:
+   ansible_python_interpreter: /usr/bin/python3
+   proxy: http://proxy.company.com
+   proxy_port: 8080
+  roles:
+    - proxy # Opcional. Módulo que configura el proxy de salida.
+    - update # Actualiza los paquetes del sistema y el kernel a la última versión.
+
+# Configuración para instalación LAMP Stack en Ubuntu 16.04
+
+- hosts: apache
+  sudo: yes
+  vars:
+    http_port: 80
+    https_port: 443
+    domain: example.com
+  roles:
+    - apache2 # Instalación de Apache2 y PHP con certificado SSL.
+    - mariadb # Instalación de MariaDB.
+    - firewall # Reglas de firewall para habilitar servicios.
+    - noproxy # Elimina toda la configuración del proxy.
+  handlers:
+  - name: restart apache2
+    service: name=apache2 state=restarted

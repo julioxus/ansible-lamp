@@ -1,0 +1,19 @@
+- name: Eliminar proxy del .bashrc
+  replace:
+    path: ~/.bashrc
+    regexp: '^.*proxy.*$'
+    replace: ''
+
+- name: Actualizar las variables creadas en .bashrc
+  shell: . ~/.bashrc
+
+- name: Unset de las variables en la shell actual
+  shell: unset http_proxy; unset https_proxy; unset ftp_proxy
+
+- name: Eliminar apt.conf
+  file:
+    path: /etc/apt/apt.conf
+    state: absent
+
+- name: Reiniciar el servicio de networking
+  service: name=networking state=restarted
