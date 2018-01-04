@@ -9,16 +9,13 @@ Instalar módulo python-apt:
 # apt-get install python-apt
 
 Crear el archivo de hosts y variable de entorno:
-# mkdir ansible
-# cd ansible/
-# echo "<dirección ip de la máquina>" > ~/ansible/hosts
-# echo "export ANSIBLE_HOSTS=~/ansible/hosts" >> ~/.bashrc
+# git clone https://github.com/julioxus/ansible-lamp
+# cd ansible-lamp
+# echo "<dirección ip de la máquina>" > ~/ansible-lamp/hosts
+# echo "export ANSIBLE_HOSTS=~/ansible-lamp/hosts" >> ~/.bashrc
 
 # . ~/.bashrc
 
-Probar la conexión con la máquina (no funciona hasta que no se ejecute el playbook del setup):
-# ansible all -u <usuario> -m ping --ask-pass
-
 Realizar despliegue:
-# ansible-playbook -i hosts <playbook.yml> --ask-pass --ask-sudo-pass
+# ansible-playbook -i hosts playbook.yml --ask-pass --ask-sudo-pass
 ```
