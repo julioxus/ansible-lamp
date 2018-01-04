@@ -1,6 +1,7 @@
 # ansible-lamp
 Create a LAMP Stack on Ubuntu with this Ansible Playbook
 
+```
 Instalar Ansible y sshpass:
 # apt-get install ansible sshpass
 
@@ -20,3 +21,4 @@ Probar la conexión con la máquina (no funciona hasta que no se ejecute el play
 
 Realizar despliegue:
 # ansible-playbook -i hosts <playbook.yml> --ask-pass --ask-sudo-pass
+```
