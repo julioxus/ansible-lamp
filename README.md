@@ -11,8 +11,11 @@ Instalar módulo python-apt:
 Crear el archivo de hosts y variable de entorno:
 # git clone https://github.com/julioxus/ansible-lamp
 # cd ansible-lamp
-# echo "<dirección ip de la máquina>" > ~/ansible-lamp/hosts
-# echo "export ANSIBLE_HOSTS=~/ansible-lamp/hosts" >> ~/.bashrc
+
+Modificar el archivo hosts para usar la IP de la máquina y usuario objetivo:
+# vi hosts
+
+# echo "export ANSIBLE_HOSTS=/path/to/ansible-lamp/hosts" >> ~/.bashrc
 
 # . ~/.bashrc
 
