@@ -1,0 +1,8 @@
+- name: Reemplazar GRUB_CMDLINE_LINUX
+  lineinfile: dest=/etc/default/grub regexp="^GRUB_CMDLINE_LINUX=*$ " line="GRUB_CMDLINE_LINUX=\"find_preseed=/preseed.cfg noprompt net.ifnames=0 biosdevname=0\"" state=present
+
+- name: Generar nuevo fichero grub
+  shell: grub-mkconfig -o /boot/grub/grub.cfg
+
+- name: Modificar el nombre de las interfaces de red
+  shell: sed -i -e "s/ens33/eth0/g" /etc/network/interfaces

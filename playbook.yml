@@ -9,6 +9,7 @@
   roles:
     - proxy # Opcional. Módulo que configura el proxy de salida.
     - update # Actualiza los paquetes del sistema y el kernel a la última versión.
+    - eth0-rename # Cambia en nombre de la interfaz de red ens33 por la old school eth0.
 
 # Configuración para instalación LAMP Stack en Ubuntu 16.04
 
