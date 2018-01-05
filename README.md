@@ -15,6 +15,9 @@ Crear el archivo de hosts y variable de entorno:
 Modificar el archivo hosts para usar la IP de la máquina y usuario objetivo:
 # vi hosts
 
+Modificar el playbook.yml para elegir las variables y tareas que se desean ejecutar:
+# vi playbook.yml
+
 # echo "export ANSIBLE_HOSTS=/path/to/ansible-lamp/hosts" >> ~/.bashrc
 
 # . ~/.bashrc
